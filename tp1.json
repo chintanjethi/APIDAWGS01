@@ -1,0 +1,113 @@
+{
+    "alerts": [
+        {
+            "sourceid": "3",
+            "other": "",
+            "method": "GET",
+            "evidence": "max-age=30, must-revalidate, public",
+            "pluginId": "10015",
+            "cweid": "525",
+            "confidence": "Low",
+            "wascid": "13",
+            "description": "The cache-control header has not been set properly or is missing, allowing the browser and proxies to cache content. For static assets like css, js, or image files this might be intended, however, the resources should be reviewed to ensure that no sensitive content will be cached.",
+            "messageId": "21",
+            "inputVector": "",
+            "url": "https://api.coindesk.com/v1/bpi/currentprice.json",
+            "tags": {
+                "CWE-525": "https://cwe.mitre.org/data/definitions/525.html",
+                "WSTG-v42-ATHN-06": "https://owasp.org/www-project-web-security-testing-guide/v42/4-Web_Application_Security_Testing/04-Authentication_Testing/06-Testing_for_Browser_Cache_Weaknesses"
+            },
+            "reference": "https://cheatsheetseries.owasp.org/cheatsheets/Session_Management_Cheat_Sheet.html#web-content-caching\nhttps://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Cache-Control\nhttps://grayduck.mn/2021/09/13/cache-control-recommendations/",
+            "solution": "For secure content, ensure the cache-control HTTP header is set with \"no-cache, no-store, must-revalidate\". If an asset should be cached consider setting the directives \"public, max-age, immutable\".",
+            "alert": "Re-examine Cache-control Directives",
+            "param": "cache-control",
+            "attack": "",
+            "name": "Re-examine Cache-control Directives",
+            "risk": "Informational",
+            "id": "20",
+            "alertRef": "10015"
+        },
+        {
+            "sourceid": "3",
+            "other": "",
+            "method": "GET",
+            "evidence": "Hit from cloudfront",
+            "pluginId": "10050",
+            "cweid": "-1",
+            "confidence": "Medium",
+            "wascid": "-1",
+            "description": "The content was retrieved from a shared cache. If the response data is sensitive, personal or user-specific, this may result in sensitive information being leaked. In some cases, this may even result in a user gaining complete control of the session of another user, depending on the configuration of the caching components in use in their environment. This is primarily an issue where caching servers such as \"proxy\" caches are configured on the local network. This configuration is typically found in corporate or educational environments, for instance. ",
+            "messageId": "21",
+            "inputVector": "",
+            "url": "https://api.coindesk.com/v1/bpi/currentprice.json",
+            "tags": {
+                "WSTG-v42-ATHN-06": "https://owasp.org/www-project-web-security-testing-guide/v42/4-Web_Application_Security_Testing/04-Authentication_Testing/06-Testing_for_Browser_Cache_Weaknesses"
+            },
+            "reference": "https://tools.ietf.org/html/rfc7234\nhttps://tools.ietf.org/html/rfc7231\nhttps://www.rfc-editor.org/rfc/rfc9110.html",
+            "solution": "Validate that the response does not contain sensitive, personal or user-specific information.  If it does, consider the use of the following HTTP response headers, to limit, or prevent the content being stored and retrieved from the cache by another user:\nCache-Control: no-cache, no-store, must-revalidate, private\nPragma: no-cache\nExpires: 0\nThis configuration directs both HTTP 1.0 and HTTP 1.1 compliant caching servers to not store the response, and to not retrieve the response (without validation) from the cache, in response to a similar request.",
+            "alert": "Retrieved from Cache",
+            "param": "",
+            "attack": "",
+            "name": "Retrieved from Cache",
+            "risk": "Informational",
+            "id": "23",
+            "alertRef": "10050-1"
+        },
+        {
+            "sourceid": "3",
+            "other": "",
+            "method": "GET",
+            "evidence": "",
+            "pluginId": "10035",
+            "cweid": "319",
+            "confidence": "High",
+            "wascid": "15",
+            "description": "HTTP Strict Transport Security (HSTS) is a web security policy mechanism whereby a web server declares that complying user agents (such as a web browser) are to interact with it using only secure HTTPS connections (i.e. HTTP layered over TLS/SSL). HSTS is an IETF standards track protocol and is specified in RFC 6797.",
+            "messageId": "21",
+            "inputVector": "",
+            "url": "https://api.coindesk.com/v1/bpi/currentprice.json",
+            "tags": {
+                "OWASP_2021_A05": "https://owasp.org/Top10/A05_2021-Security_Misconfiguration/",
+                "CWE-319": "https://cwe.mitre.org/data/definitions/319.html",
+                "OWASP_2017_A06": "https://owasp.org/www-project-top-ten/2017/A6_2017-Security_Misconfiguration.html"
+            },
+            "reference": "https://cheatsheetseries.owasp.org/cheatsheets/HTTP_Strict_Transport_Security_Cheat_Sheet.html\nhttps://owasp.org/www-community/Security_Headers\nhttps://en.wikipedia.org/wiki/HTTP_Strict_Transport_Security\nhttps://caniuse.com/stricttransportsecurity\nhttps://datatracker.ietf.org/doc/html/rfc6797",
+            "solution": "Ensure that your web server, application server, load balancer, etc. is configured to enforce Strict-Transport-Security.",
+            "alert": "Strict-Transport-Security Header Not Set",
+            "param": "",
+            "attack": "",
+            "name": "Strict-Transport-Security Header Not Set",
+            "risk": "Low",
+            "id": "24",
+            "alertRef": "10035-1"
+        },
+        {
+            "sourceid": "3",
+            "other": "This issue still applies to error type pages (401, 403, 500, etc.) as those pages are often still affected by injection issues, in which case there is still concern for browsers sniffing pages away from their actual content type.\nAt \"High\" threshold this scan rule will not alert on client or server error responses.",
+            "method": "GET",
+            "evidence": "",
+            "pluginId": "10021",
+            "cweid": "693",
+            "confidence": "Medium",
+            "wascid": "15",
+            "description": "The Anti-MIME-Sniffing header X-Content-Type-Options was not set to 'nosniff'. This allows older versions of Internet Explorer and Chrome to perform MIME-sniffing on the response body, potentially causing the response body to be interpreted and displayed as a content type other than the declared content type. Current (early 2014) and legacy versions of Firefox will use the declared content type (if one is set), rather than performing MIME-sniffing.",
+            "messageId": "21",
+            "inputVector": "",
+            "url": "https://api.coindesk.com/v1/bpi/currentprice.json",
+            "tags": {
+                "OWASP_2021_A05": "https://owasp.org/Top10/A05_2021-Security_Misconfiguration/",
+                "CWE-693": "https://cwe.mitre.org/data/definitions/693.html",
+                "OWASP_2017_A06": "https://owasp.org/www-project-top-ten/2017/A6_2017-Security_Misconfiguration.html"
+            },
+            "reference": "https://learn.microsoft.com/en-us/previous-versions/windows/internet-explorer/ie-developer/compatibility/gg622941(v=vs.85)\nhttps://owasp.org/www-community/Security_Headers",
+            "solution": "Ensure that the application/web server sets the Content-Type header appropriately, and that it sets the X-Content-Type-Options header to 'nosniff' for all web pages.\nIf possible, ensure that the end user uses a standards-compliant and modern web browser that does not perform MIME-sniffing at all, or that can be directed by the web application/web server to not perform MIME-sniffing.",
+            "alert": "X-Content-Type-Options Header Missing",
+            "param": "x-content-type-options",
+            "attack": "",
+            "name": "X-Content-Type-Options Header Missing",
+            "risk": "Low",
+            "id": "25",
+            "alertRef": "10021"
+        }
+    ]
+}
