@@ -5,6 +5,10 @@
 Navigate to the `api-manager` and `backend` directories and install the required dependencies.
 
 ```bash
+# Add python libraries
+pip install simplejson
+pip install zaproxy
+
 # Navigate to api-manager directory and install dependencies
 cd path/to/api-manager
 npm install
